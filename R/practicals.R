@@ -71,622 +71,448 @@ commands <- function() {
 #'
 #' @return Invisibly returns the code as a character string.
 #' @export
-practical1 <- function() {
-  code <- r"=====(
-a <- 10
-b <- 5
-a+b
+Practical1_R_for_Finance <- function() {
+  code <- '
+# ---- Basic R computations ----
+x <- c(2, 4, 6, 8, 10)
+mean(x); sd(x); var(x)
 
-a-b
+# ---- Data structures ----
+vec <- 1:5
+mat <- matrix(1:6, nrow = 2)
+lst <- list(name = "Stock A", price = 100.5)
+df  <- data.frame(Stock = c("A", "B", "C"), Price = c(100, 150, 200))
 
-a*b
+print(mat)
+print(lst)
+print(df)
 
-a/b
+# ---- Financial calculation: Future Value ----
+FV <- function(PV, r, n) PV * (1 + r)^n
+FV(1000, 0.08, 5)   # 1000 invested at 8% for 5 years
 
-a^2
+# ---- Probability & statistics ----
+set.seed(1)
+returns <- rnorm(100, mean = 0.001, sd = 0.02)   # simulated daily returns
+mean(returns); sd(returns)
+quantile(returns, 0.05)   # 5th percentile (rough VaR)
 
-sqrt(16)
-
-log(10)
-
-exp(2)
-
-abs(-5)
-
-v <-c(10,20,30,40)
-m<-matrix(1:6,nrow=2,ncol=3)
-df <- data.frame(
-  name = c("A", "B"),
-  marks = c(90, 85)
-)
-P <- 1000
-R <- 5 
-T <- 2
-SI <- (P * R * T) / 100
-CI <- P * (1 + R/100)^T
-dnorm(0) 
-
-pnorm(1) 
-
-rnorm(5)
-
-dbinom(2, size = 5, prob = 0.5)
-
-dpois(3, lambda = 2)
-
-x <- c(10, 20, 30, 40, 50)
-mean(x)
-
-median(x) 
-
-sd(x) 
-
-var(x)
-
-y <- c(12, 25, 35, 45, 60)
-cor(x, y)
-
-plot(x, y)
-
-library(ggplot2)
-ggplot(data = df, aes(x = name, y = marks)) +
-  geom_bar(stat = "identity")
-
-install.packages("rmarkdown")
-summary(cars)
-
-l <- list(name = "adlin", age = 25, marks = c(80, 90))
-l
-)====="
+# ---- Visualization ----
+hist(returns, main = "Simulated Daily Returns", col = "skyblue", breaks = 15)
+plot(cumsum(returns), type = "l", main = "Cumulative Returns", col = "darkblue",
+     xlab = "Day", ylab = "Cumulative Return")
+'
+  cat("\n==================== Practical 1: R for Finance ====================\n")
   cat(code)
-  invisible(code)
 }
 
-# ---------------------------------------------------------------
-# PRACTICAL 2: More R Warm-Ups
-# ---------------------------------------------------------------
-#' Practical 2: More R Warm-Ups
-#'
-#' Prints the R code for Practical 2 (More R Warm-Ups) to the console.
-#'
-#' @return Invisibly returns the code as a character string.
-#' @export
-practical2 <- function() {
-  code <- r"=====(
-# 1. Basic Functions in R
-my_mean <- function(x) {
-sum(x) / length(x)
-}
-data <- c(10, 20, 30, 40, 50)
-my_mean(data)
+Practical2_R_Warmups <- function() {
+  code <- '
+# ---- Function ----
+compound_interest <- function(P, r, t) P * (1 + r)^t
+sapply(1:5, function(t) compound_interest(1000, 0.05, t))
 
-# 2. Loops (For Loop)
+# ---- For loop with control flow ----
 for (i in 1:5) {
-print(paste("Square of", i, "=", i^2))
+  if (i %% 2 == 0) {
+    cat(i, "is even\\n")
+  } else {
+    cat(i, "is odd\\n")
+  }
 }
 
-# 3. While Loop
+# ---- While loop ----
 i <- 1
-while (i <= 5) {
-print(i)
-i <- i + 1
+total <- 0
+while (i <= 10) {
+  total <- total + i
+  i <- i + 1
 }
+cat("Sum 1 to 10:", total, "\\n")
 
-# 4. Control Statements (if-else)
-num <- 7
-if (num %% 2 == 0) {
-print("Even Number")
-} else {
-print("Odd Number")
-}
+# ---- Bootstrapping: estimate CI for mean return ----
+set.seed(42)
+returns <- rnorm(50, mean = 0.001, sd = 0.02)
 
-# 5. Vector Operations
-x <- c(5, 10, 15, 20)
-x * 2
-mean(x)
-sd(x)
+boot_means <- replicate(1000, mean(sample(returns, replace = TRUE)))
+ci <- quantile(boot_means, c(0.025, 0.975))
+cat("Bootstrap 95% CI for mean return:", ci, "\\n")
 
-# 6. Simulation (Random Data Generation)
-set.seed(123)
-sim_data <- rnorm(100, mean = 50, sd = 10)
-head(sim_data)
+# ---- Simulation: random walk ----
+set.seed(1)
+steps <- rnorm(100)
+walk <- cumsum(steps)
 
-# Visualization of Simulation
-hist(sim_data, col="skyblue", main="Histogram of Simulated Data")
-boxplot(sim_data, col="orange", main="Boxplot")
-plot(density(sim_data), col="blue", main="Density Plot")
-
-# 7. Bootstrapping (resampling with replacement)
-bootstrap_mean <- function(data, n_iter = 1000) {
-means <- numeric(n_iter)
-for (i in 1:n_iter) {
-sample_data <- sample(data, replace = TRUE)
-means[i] <- mean(sample_data)
-}
-return(means)
-}
-
-boot_results <- bootstrap_mean(sim_data, 1000)
-mean(boot_results)
-hist(boot_results, col="green", main="Bootstrap Means Distribution")
-
-# 8. Comparing Original vs Bootstrap Mean
-original_mean <- mean(sim_data)
-bootstrap_mean_val <- mean(boot_results)
-print(paste("Original Mean:", original_mean))
-print(paste("Bootstrap Mean:", bootstrap_mean_val))
-
-# 9. Advanced Visualization (ggplot2)
-install.packages("ggplot2")
-library(ggplot2)
-df <- data.frame(values = sim_data)
-ggplot(df, aes(x = values)) +
-geom_histogram(fill = "blue", bins = 20) +
-ggtitle("Histogram using ggplot2")
-
-# 10. Mini Experiment (Simulation + Loop)
-results <- c()
-for (i in 1:100) {
-toss <- sample(c("Head", "Tail"), 1)
-results <- c(results, toss)
-}
-table(results)
-)====="
+# ---- Visualization ----
+par(mfrow = c(1, 2))
+plot(walk, type = "l", main = "Simulated Random Walk", col = "darkred", xlab = "Step")
+hist(boot_means, main = "Bootstrap Distribution\\nof Mean Return", col = "lightgreen", breaks = 20)
+par(mfrow = c(1, 1))
+'
+  cat("\n==================== Practical 2: More R Warm-Ups ====================\n")
   cat(code)
-  invisible(code)
 }
 
-# ---------------------------------------------------------------
-# PRACTICAL 3: Term Structure and Splines
-# ---------------------------------------------------------------
-#' Practical 3: Term Structure and Splines
-#'
-#' Prints the R code for Practical 3 (Term Structure and Splines) to the console.
-#'
-#' @return Invisibly returns the code as a character string.
-#' @export
-practical3 <- function() {
-  code <- r"=====(
-library(splines)
-maturity <- c(1, 2, 3)
-yield <- c(0.05, 0.06, 0.07)
-face_value <- 100
-price <- face_value / (1 + yield)^maturity
-data.frame(maturity, yield, price)
-
-yield_up <- yield + 0.01
-price_up <- face_value / (1 + yield_up)^maturity
-yield_down <- yield - 0.01
-price_down <- face_value / (1 + yield_down)^maturity
-data.frame(
-  maturity,
-  base_price = price,
-  price_when_rate_up = price_up,
-  price_when_rate_down = price_down
-)
-
-maturity <- c(1, 2, 3)
-yield <- c(0.05, 0.06, 0.07)
-t_range <- seq(1, 3, length.out = 100)
-spline_model <- lm(yield ~ bs(maturity, degree = 3))
-smooth_yield <- predict(
-  spline_model,
-  newdata = data.frame(maturity = t_range)
-)
-forward_rate <- diff(smooth_yield) / diff(t_range)
-plot(maturity, yield,
-     pch = 19,
-     xlab = "Maturity (Years)",
-     ylab = "Yield",
-     main = "Term Structure (Spline Model)")
-lines(t_range, smooth_yield,
-      col = "blue",
-      lwd = 2)
-
-plot(t_range[-1], forward_rate,
-     type = "l",
-     col = "red",
-     lwd = 2,
-     xlab = "Maturity",
-     ylab = "Forward Rate",
-     main = "Forward Rates Curve")
-
-head(data.frame(
-  maturity = t_range[-1],
-  forward_rate = forward_rate
-))
-
-install.packages("minpack.lm")
+Practical3_Term_Structure_Splines <- function() {
+  code <- '
 library(minpack.lm)
-maturity <- c(1, 2, 3, 4, 5)
-yield <- c(0.05, 0.055, 0.06, 0.065, 0.07)
-face_value <- 100
-price <- face_value / (1 + yield)^maturity
-model <- nlsLM(
-  price ~ face_value / (1 + (a + b*maturity))^maturity,
-  start = list(a = 0.05, b = 0.01)
+
+# ---- Statistical/financial setup: small synthetic yield curve ----
+maturity <- c(0.5, 1, 2, 3, 5, 7, 10, 20, 30)
+set.seed(1)
+true_yield <- c(0.020, 0.022, 0.025, 0.028, 0.032, 0.035, 0.038, 0.042, 0.044)
+yield <- true_yield + rnorm(length(maturity), 0, 0.0008)   # small noise -> "market" yields
+
+# Bond price from yield (zero-coupon, continuous compounding)
+bond_price <- function(y, m) exp(-y * m)
+prices <- bond_price(yield, maturity)
+
+# ---- Scenario exploration: shock yields up/down ----
+shock <- 0.01
+yield_up   <- yield + shock
+yield_down <- yield - shock
+
+# ---- Model 1: Nelson-Siegel forward/spot rate model ----
+ns_model <- function(m, b0, b1, b2, tau) {
+  b0 + (b1 + b2) * (tau / m) * (1 - exp(-m / tau)) - b2 * exp(-m / tau)
+}
+
+fit_ns <- nlsLM(
+  yield ~ ns_model(maturity, b0, b1, b2, tau),
+  start = list(b0 = 0.04, b1 = -0.02, b2 = 0.01, tau = 2)
 )
-summary(model)
+summary(fit_ns)
 
-coef(model)
+# ---- Model 2: Cubic smoothing spline ----
+spline_fit <- smooth.spline(maturity, yield)
 
-maturity <- c(1, 2, 3, 4, 5)
-yield <- c(0.05, 0.055, 0.06, 0.065, 0.07)
-poly_model <- lm(yield ~ maturity + I(maturity^2))
-library(splines)
-spline_model <- lm(yield ~ bs(maturity, degree = 3))
-poly_pred <- predict(poly_model)
-spline_pred <- predict(spline_model)
-poly_error <- sum((yield - poly_pred)^2)
-spline_error <- sum((yield - spline_pred)^2)
-cat("Polynomial Error:", poly_error, "\n")
+# ---- Compare the two model specifications ----
+rmse_ns     <- sqrt(mean(residuals(fit_ns)^2))
+rmse_spline <- sqrt(mean((yield - predict(spline_fit, maturity)$y)^2))
+cat("RMSE Nelson-Siegel:", rmse_ns, "\\n")
+cat("RMSE Spline:       ", rmse_spline, "\\n")
 
-cat("Spline Error:", spline_error, "\n")
-)====="
+# ---- Visualization ----
+plot(maturity, yield, pch = 19, main = "Term Structure: Nelson-Siegel vs Spline",
+     xlab = "Maturity (yrs)", ylab = "Yield")
+lines(maturity, predict(fit_ns), col = "blue", lwd = 2)
+lines(spline_fit, col = "red", lwd = 2)
+legend("bottomright", legend = c("Nelson-Siegel", "Spline"),
+       col = c("blue", "red"), lty = 1, lwd = 2)
+'
+  cat("\n==================== Practical 3: Term Structure and Splines ====================\n")
   cat(code)
-  invisible(code)
 }
 
-# ---------------------------------------------------------------
-# PRACTICAL 4: Market Risk
-# ---------------------------------------------------------------
-#' Practical 4: Market Risk
-#'
-#' Prints the R code for Practical 4 (Market Risk) to the console.
-#'
-#' @return Invisibly returns the code as a character string.
-#' @export
-practical4 <- function() {
-  code <- r"=====(
-install.packages(c("quantmod", "PerformanceAnalytics", "ggplot2"))
+Practical4_Market_Risk <- function() {
+  code <- '
+set.seed(10)
+returns <- rnorm(250, mean = 0.0005, sd = 0.015)   # 1 trading year of daily returns
 
-library(quantmod)
-library(PerformanceAnalytics)
-library(ggplot2)
-getSymbols("AAPL", from = "2022-01-01", to = "2024-01-01")
+# ---- Parametric (variance-covariance) VaR at 95% ----
+mu <- mean(returns)
+sigma <- sd(returns)
+VaR_param <- -(mu + sigma * qnorm(0.05))
 
-prices <- na.omit(Cl(AAPL))
-returns <- na.omit(dailyReturn(prices))
-VaR_hist <- quantile(returns, probs = 0.05)
-mean_ret <- mean(returns)
-sd_ret <- sd(returns)
-VaR_param <- mean_ret + sd_ret * qnorm(0.05)
-print(VaR_hist)
+# ---- Historical VaR at 95% ----
+VaR_hist <- -quantile(returns, 0.05)
 
-print(VaR_param)
+cat("Parametric VaR (95%):", round(VaR_param, 4), "\\n")
+cat("Historical VaR (95%):", round(VaR_hist, 4), "\\n")
 
-ggplot(data = data.frame(returns), aes(x = returns)) +
-geom_histogram(bins = 50, fill = "blue", alpha = 0.7) +
-geom_vline(xintercept = VaR_hist, color = "red", linetype = "dashed") +
-geom_vline(xintercept = VaR_param, color = "green", linetype = "dashed") +
-ggtitle("Market Risk Visualization using VaR")
-)====="
+# ---- Business interpretation: potential $ loss on a portfolio ----
+portfolio_value <- 1e6
+cat("Estimated 1-day loss (Parametric):", round(VaR_param * portfolio_value, 0), "\\n")
+cat("Estimated 1-day loss (Historical): ", round(VaR_hist * portfolio_value, 0), "\\n")
+
+# ---- Visualization ----
+hist(returns, breaks = 30, col = "lightblue",
+     main = "Return Distribution with VaR Thresholds", xlab = "Daily Return")
+abline(v = -VaR_hist, col = "red", lwd = 2)
+abline(v = -VaR_param, col = "blue", lwd = 2)
+legend("topright", legend = c("Historical VaR", "Parametric VaR"),
+       col = c("red", "blue"), lty = 1, lwd = 2)
+'
+  cat("\n==================== Practical 4: Market Risk ====================\n")
   cat(code)
-  invisible(code)
 }
 
-# ---------------------------------------------------------------
-# PRACTICAL 5: Credit Risk
-# ---------------------------------------------------------------
-#' Practical 5: Credit Risk
-#'
-#' Prints the R code for Practical 5 (Credit Risk) to the console.
-#'
-#' @return Invisibly returns the code as a character string.
-#' @export
-practical5 <- function() {
-  code <- r"=====(
-install.packages("markovchain")
-library(markovchain)
-states <- c("AAA", "AA", "A", "BBB", "Default")
-transition_matrix <- matrix(c(
-  0.85, 0.10, 0.03, 0.01, 0.01,
-  0.05, 0.80, 0.10, 0.03, 0.02,
-  0.02, 0.08, 0.75, 0.10, 0.05,
-  0.01, 0.04, 0.10, 0.70, 0.15,
-  0.00, 0.00, 0.00, 0.00, 1.00
-), byrow = TRUE, nrow = 5)
-rownames(transition_matrix) <- states
-colnames(transition_matrix) <- states
-mc <- new("markovchain", states = states, transitionMatrix = transition_matrix)
-simulation <- rmarkovchain(n = 10, object = mc, t0 = "AAA")
-print(simulation)
+Practical5_Credit_Risk <- function() {
+  code <- '
+# ---- Simplified credit rating transition matrix ----
+states <- c("A", "B", "C", "D")   # D = Default (absorbing state)
+P <- matrix(c(
+  0.90, 0.08, 0.015, 0.005,
+  0.10, 0.80, 0.08,  0.02,
+  0.02, 0.15, 0.70,  0.13,
+  0.00, 0.00, 0.00,  1.00
+), nrow = 4, byrow = TRUE, dimnames = list(states, states))
+print(P)
 
-default_probs <- transition_matrix[, "Default"]
-print(default_probs)
+# ---- Simulate one rating path using the Markov chain ----
+set.seed(5)
+simulate_path <- function(start = "A", steps = 10) {
+  path <- start
+  current <- start
+  for (i in 1:steps) {
+    current <- sample(states, 1, prob = P[current, ])
+    path <- c(path, current)
+    if (current == "D") break
+  }
+  path
+}
+simulate_path("B", 10)
 
-df <- data.frame(State = states, DefaultProb = default_probs)
-ggplot(df, aes(x = State, y = DefaultProb)) +
-  geom_bar(stat = "identity") +
-  ggtitle("Default Probability by Credit Rating")
+# ---- Estimate default probability via Monte Carlo simulation ----
+n_sims <- 1000
+defaulted <- replicate(n_sims, "D" %in% simulate_path("B", 10))
+cat("Simulated 10-yr default probability (starting B):", mean(defaulted), "\\n")
 
-hazard_rate <- default_probs / (1 - default_probs)
-print(hazard_rate)
+# ---- Hazard rate: instantaneous default intensity from 1-yr survival ----
+survival_1yr <- 1 - P["B", "D"]
+hazard_rate <- -log(survival_1yr)
+cat("1-year hazard rate for B-rated credit:", round(hazard_rate, 4), "\\n")
 
-two_step <- transition_matrix %*% transition_matrix
-print(two_step)
-)====="
+# ---- n-step transition probabilities (matrix power) ----
+P5 <- P %*% P %*% P %*% P %*% P   # 5-year transition matrix
+cat("5-year transition matrix:\\n")
+print(round(P5, 3))
+
+barplot(defaulted |> table() |> prop.table(), col = c("darkgreen", "darkred"),
+        names.arg = c("Survived", "Defaulted"),
+        main = "Simulated 10-yr Outcomes (starting B)")
+'
+  cat("\n==================== Practical 5: Credit Risk ====================\n")
   cat(code)
-  invisible(code)
 }
 
-# ---------------------------------------------------------------
-# PRACTICAL 6: Operational Risk
-# ---------------------------------------------------------------
-#' Practical 6: Operational Risk
-#'
-#' Prints the R code for Practical 6 (Operational Risk) to the console.
-#'
-#' @return Invisibly returns the code as a character string.
-#' @export
-practical6 <- function() {
-  code <- r"=====(
-frequency <- rpois(100, lambda = 5)
-severity <- rlnorm(100, meanlog = 10, sdlog = 1)
-expected_loss <- mean(frequency) * mean(severity)
-aggregate_loss <- sum(frequency * severity)
-print(expected_loss)
+Practical6_Operational_Risk <- function() {
+  code <- '
+library(evd)
+set.seed(7)
 
-print(aggregate_loss)
+# ---- Frequency: number of loss events per year (Poisson) ----
+n_years <- 1000
+frequency <- rpois(n_years, lambda = 3)
 
-fire_losses <- c(50000, 120000, 30000, 70000, 150000)
-print(mean(fire_losses))
+# ---- Severity: loss amount per event (lognormal) ----
+severity_fn <- function(n) rlnorm(n, meanlog = 8, sdlog = 1.2)
 
-print(max(fire_losses))
+# ---- Aggregate annual loss (compound frequency-severity model) ----
+annual_loss <- sapply(frequency, function(n) if (n == 0) 0 else sum(severity_fn(n)))
 
-total_losses <- frequency * severity
-VaR_95 <- quantile(total_losses, 0.95)
-VaR_99 <- quantile(total_losses, 0.99)
-print(VaR_95)
+cat("Mean annual operational loss:  ", round(mean(annual_loss), 0), "\\n")
+cat("Median annual operational loss:", round(median(annual_loss), 0), "\\n")
+cat("95% Loss (VaR):                ", round(quantile(annual_loss, 0.95), 0), "\\n")
 
-print(VaR_99)
-)====="
+# ---- Fire losses (a specific severity category) ----
+fire_losses <- rlnorm(200, meanlog = 9, sdlog = 1.5)
+cat("Mean fire loss:", round(mean(fire_losses), 0), "\\n")
+cat("Max fire loss:  ", round(max(fire_losses), 0), "\\n")
+
+# ---- Estimating the extremes: Peaks-Over-Threshold (GPD) ----
+threshold <- quantile(fire_losses, 0.90)
+gpd_fit <- fpot(fire_losses, threshold = threshold)
+summary(gpd_fit)
+
+# ---- Visualization ----
+par(mfrow = c(1, 2))
+hist(annual_loss, breaks = 30, col = "orange", main = "Annual Operational Loss")
+hist(fire_losses, breaks = 30, col = "tomato", main = "Fire Loss Severity")
+par(mfrow = c(1, 1))
+'
+  cat("\n==================== Practical 6: Operational Risk ====================\n")
   cat(code)
-  invisible(code)
 }
 
-# ---------------------------------------------------------------
-# PRACTICAL 7: Measuring Volatility
-# ---------------------------------------------------------------
-#' Practical 7: Measuring Volatility
-#'
-#' Prints the R code for Practical 7 (Measuring Volatility) to the console.
-#'
-#' @return Invisibly returns the code as a character string.
-#' @export
-practical7 <- function() {
-  code <- r"=====(
-install.packages("rugarch") 
+Practical7_Volatility_GARCH <- function() {
+  code <- '
 library(rugarch)
-set.seed(123)
-returns <- rnorm(500, mean = 0, sd = 0.02)
-plot(returns, type="l", main="Returns Series")
+set.seed(3)
 
+# ---- Small simulated return series with clustering (fast to fit) ----
+n <- 300
+returns <- rnorm(n, 0, 0.02)
+
+# ---- Specify and fit AR(1)-GARCH(1,1) model ----
 spec <- ugarchspec(
-  variance.model = list(model = "sGARCH", garchOrder = c(1,1)), 
-  mean.model = list(armaOrder = c(1,1)) 
+  variance.model = list(model = "sGARCH", garchOrder = c(1, 1)),
+  mean.model = list(armaOrder = c(1, 0))
 )
-fit <- ugarchfit(spec = spec, data = returns)
-print(fit)
+fit <- ugarchfit(spec, returns)
+show(fit)
 
-volatility <- sigma(fit)
-plot(volatility, type="l", main="Estimated Volatility")
+# ---- Simulate volatility path from the fitted AR-GARCH model ----
+sim <- ugarchsim(fit, n.sim = 100, n.start = 0, m.sim = 1)
+sim_vol <- sigma(sim)
 
-sim <- ugarchsim(fit, n.sim = 100)
-sim_returns <- fitted(sim)
-VaR_95 <- quantile(sim_returns, 0.05) 
-VaR_99 <- quantile(sim_returns, 0.01)
-print(VaR_95)
+# ---- Measure risk: 1-day 95% VaR using conditional volatility ----
+vol_forecast <- tail(sigma(fit), 1)
+VaR_95 <- -qnorm(0.05) * vol_forecast
+cat("1-day 95% VaR (GARCH conditional vol):", round(VaR_95, 4), "\\n")
 
-print(VaR_99)
-)====="
+# ---- Visualization ----
+par(mfrow = c(1, 2))
+plot(sigma(fit), type = "l", main = "Fitted Conditional Volatility", col = "purple")
+plot(sim_vol, type = "l", main = "Simulated Future Volatility", col = "darkgreen")
+par(mfrow = c(1, 1))
+'
+  cat("\n==================== Practical 7: Measuring Volatility ====================\n")
   cat(code)
-  invisible(code)
 }
 
-# ---------------------------------------------------------------
-# PRACTICAL 8: Portfolio Analytics
-# ---------------------------------------------------------------
-#' Practical 8: Portfolio Analytics
-#'
-#' Prints the R code for Practical 8 (Portfolio Analytics) to the console.
-#'
-#' @return Invisibly returns the code as a character string.
-#' @export
-practical8 <- function() {
-  code <- r"=====(
-install.packages(c("quantmod", "PortfolioAnalytics", "PerformanceAnalytics", "ROI","ROI.plugin.quadprog"))
-library(quantmod)
-library(PortfolioAnalytics)
-library(PerformanceAnalytics)
-library(ROI)
-library(ROI.plugin.quadprog)
-stocks <- c("AAPL", "MSFT", "GOOG", "AMZN")
-getSymbols(stocks, from = "2020-01-01", src = "yahoo")
-prices <- na.omit(merge(Cl(AAPL), Cl(MSFT), Cl(GOOG), Cl(AMZN)))
-colnames(prices) <- stocks
-returns <- na.omit(Return.calculate(prices, method = "log"))
-portfolio <- portfolio.spec(assets = colnames(returns))
-portfolio <- add.constraint(portfolio, type = "box", min = 0, max = 1)
-portfolio <- add.constraint(portfolio, type = "weight_sum", min_sum = 1, max_sum = 1)
-portfolio <- add.objective(portfolio, type = "return", name = "mean")
-portfolio <- add.objective(portfolio, type = "risk", name = "StdDev")
-opt_portfolio <- optimize.portfolio(R = returns, portfolio = portfolio, optimize_method = "ROI")
-weights <- extractWeights(opt_portfolio)
-print("Optimal Weights")
-print(weights)
+Practical8_Portfolio_Analytics <- function() {
+  code <- '
+library(quadprog)
+set.seed(2)
 
-portfolio_returns <- xts(returns %*% weights, order.by = index(returns))
-charts.PerformanceSummary(portfolio_returns, main = "Optimized Portfolio Performance")
+# ---- Small synthetic returns for 4 assets ----
+n <- 100
+assets <- matrix(rnorm(n * 4, mean = 0.0005, sd = 0.015), ncol = 4)
+colnames(assets) <- c("A", "B", "C", "D")
 
-print("Portfolio Risk:")
-StdDev(portfolio_returns)
+mean_ret <- colMeans(assets)
+cov_mat  <- cov(assets)
 
-print("Sharpe Ratio:")
-SharpeRatio(portfolio_returns)
+# ---- Minimum-variance portfolio optimization (fully invested, long-only) ----
+n_assets <- 4
+Dmat <- 2 * cov_mat
+dvec <- rep(0, n_assets)
+Amat <- cbind(rep(1, n_assets), diag(n_assets))   # weights sum to 1, weights >= 0
+bvec <- c(1, rep(0, n_assets))
 
-SharpeRatio(portfolio_returns)
-weights[abs(weights) < 1e-4] <- 0
-cat("\nOptimal Portfolio Weights:\n")
-print(round(weights, 4))
+sol <- solve.QP(Dmat, dvec, Amat, bvec, meq = 1)
+weights <- sol$solution
+names(weights) <- colnames(assets)
+cat("Optimal (minimum variance) weights:\\n")
+print(round(weights, 3))
 
-portfolio_returns <- xts(returns %*% weights, order.by = index(returns))
-port_risk <- StdDev(portfolio_returns)
-port_sharpe <- SharpeRatio(portfolio_returns)
-cat("\nRisk (Standard Deviation):\n")
-print(round(port_risk, 4))
+# ---- Combine with risk management: portfolio return & risk ----
+port_return <- sum(weights * mean_ret)
+port_risk   <- sqrt(t(weights) %*% cov_mat %*% weights)
+port_VaR95  <- -qnorm(0.05) * port_risk
 
-cat("\nSharpe Ratio:\n")
-print(round(port_sharpe, 4))
-)====="
+cat("Expected portfolio return:", round(port_return, 5), "\\n")
+cat("Portfolio risk (sd):      ", round(port_risk, 5), "\\n")
+cat("Portfolio 95% VaR:        ", round(port_VaR95, 5), "\\n")
+
+# ---- Visualization ----
+barplot(weights, main = "Minimum Variance Portfolio Weights",
+        col = "steelblue", ylab = "Weight")
+'
+  cat("\n==================== Practical 8: Portfolio Analytics ====================\n")
   cat(code)
-  invisible(code)
 }
 
-# ---------------------------------------------------------------
-# PRACTICAL 9: Monte Carlo Risk Analysis
-# ---------------------------------------------------------------
-#' Practical 9: Monte Carlo Risk Analysis
-#'
-#' Prints the R code for Practical 9 (Monte Carlo Risk Analysis) to the console.
-#'
-#' @return Invisibly returns the code as a character string.
-#' @export
-practical9 <- function() {
-  code <- r"=====(
-library(quantmod)
-library(PerformanceAnalytics)
-stocks <- c("AAPL", "MSFT", "GOOG", "AMZN")
-getSymbols(stocks, from = "2020-01-01", src = "yahoo")
+Practical9_Monte_Carlo_Risk <- function() {
+  code <- '
+set.seed(11)
 
-prices <- na.omit(merge(Cl(AAPL), Cl(MSFT), Cl(GOOG), Cl(AMZN)))
-colnames(prices) <- stocks
-returns <- na.omit(Return.calculate(prices, method = "log"))
-weights <- c(0.25, 0.25, 0.25, 0.25)
-set.seed(123)
-n_sim <- 1000 
-n_days <- 252
-mean_returns <- colMeans(returns)
-cov_matrix <- cov(returns)
-simulated_returns <- matrix(0, nrow = n_days, ncol = n_sim)
-for(i in 1:n_sim){
-  sim_data <- MASS::mvrnorm(n_days, mu = mean_returns, Sigma = cov_matrix)
-  portfolio_sim <- sim_data %*% weights
-  simulated_returns[, i] <- portfolio_sim
-}
-initial_investment <- 100000
-portfolio_values <- apply(simulated_returns, 2, function(x){
-  initial_investment * exp(cumsum(x))
-})
-final_values <- portfolio_values[n_days, ]
-VaR_95 <- quantile(final_values, 0.05)
-ES_95 <- mean(final_values[final_values <= VaR_95])
-matplot(portfolio_values, type = "l", lty = 1,
-        main = "Monte Carlo Simulation of Portfolio Value",
-        xlab = "Days", ylab = "Portfolio Value")
+n_sims <- 10000
+S0    <- 100    # initial value
+mu    <- 0.08   # expected annual return
+sigma <- 0.20   # annual volatility
+Tt    <- 1      # 1 year horizon
 
-cat("\n========== MONTE CARLO RISK ANALYSIS ==========\n")
-cat("\nInitial Investment:", format(initial_investment, scientific = FALSE), "\n")
+# ---- Simulate terminal values via Geometric Brownian Motion ----
+Z  <- rnorm(n_sims)
+ST <- S0 * exp((mu - 0.5 * sigma^2) * Tt + sigma * sqrt(Tt) * Z)
 
-cat("\nValue at Risk (95%):\n")
-print(round(VaR_95, 2))
+# ---- Loss relative to initial value ----
+loss <- S0 - ST
 
-cat("\nExpected Shortfall (95%):\n")
-print(round(ES_95, 2))
-)====="
+# ---- Risk measures ----
+VaR_95 <- quantile(loss, 0.95)
+ES_95  <- mean(loss[loss > VaR_95])   # Expected Shortfall / Conditional VaR
+
+cat("Monte Carlo 95% VaR:              ", round(VaR_95, 2), "\\n")
+cat("Monte Carlo 95% Expected Shortfall:", round(ES_95, 2), "\\n")
+cat("Probability of any loss:           ", round(mean(loss > 0), 3), "\\n")
+
+# ---- Visualization ----
+par(mfrow = c(1, 2))
+hist(ST, breaks = 50, col = "lightgreen", main = "Simulated Terminal Values")
+hist(loss, breaks = 50, col = "salmon", main = "Simulated Loss Distribution")
+abline(v = VaR_95, col = "red", lwd = 2)
+par(mfrow = c(1, 1))
+'
+  cat("\n==================== Practical 9: Monte Carlo Risk Simulation ====================\n")
   cat(code)
-  invisible(code)
 }
 
-# ---------------------------------------------------------------
-# PRACTICAL 10: Build an App (Shiny)
-# ---------------------------------------------------------------
-#' Practical 10: Build an App (Shiny)
-#'
-#' Prints the R code for Practical 10 (Build an App (Shiny)) to the console.
-#'
-#' @return Invisibly returns the code as a character string.
-#' @export
-practical10 <- function() {
-  code <- r"=====(
-install.packages("shiny")
-install.packages("ggplot2")
-install.packages("dplyr")
+Practical10_Shiny_App <- function() {
+  code <- '
+# ---------------- ANALYTICS LAYER ----------------
 library(shiny)
-library(ggplot2)
-library(dplyr)
 
-# Simulation function
-run_simulation <- function(n_sims, mean_return, volatility, investment) {
-  simulated_returns <- rnorm(n_sims, mean = mean_return, sd = volatility)
-  final_values <- investment * (1 + simulated_returns)
-  VaR_95 <- quantile(final_values, 0.05)
-  ES_95 <- mean(final_values[final_values <= VaR_95])
-  return(list(
-    final_values = final_values,
-    VaR = VaR_95,
-    ES = ES_95
-  ))
+run_analytics <- function(n_sims, mu, sigma, S0) {
+  set.seed(123)
+  Z    <- rnorm(n_sims)
+  ST   <- S0 * exp((mu - 0.5 * sigma^2) + sigma * Z)
+  loss <- S0 - ST
+  VaR  <- quantile(loss, 0.95)
+  list(ST = ST, loss = loss, VaR = VaR)
 }
 
-# UI
+# ---------------- USER INTERFACE (UI) LAYER ----------------
 ui <- fluidPage(
-  titlePanel("Portfolio Risk Simulation App"),
+  titlePanel("Monte Carlo Risk App"),
   sidebarLayout(
     sidebarPanel(
-      sliderInput("n_sims", "Number of Simulations",
-                  min = 100, max = 10000, value = 1000, step = 100),
-      sliderInput("mean_return", "Expected Return",
-                  min = -0.1, max = 0.2, value = 0.05, step = 0.01),
-      sliderInput("volatility", "Volatility",
-                  min = 0.01, max = 0.5, value = 0.1, step = 0.01),
-      
-      sliderInput("investment", "Investment Amount",
-                  min = 1000, max = 100000, value = 10000, step = 1000)
+      sliderInput("n_sims", "Number of Simulations", 1000, 20000, 5000, step = 1000),
+      sliderInput("mu",     "Expected Return",        0, 0.2, 0.08, step = 0.01),
+      sliderInput("sigma",  "Volatility",              0.05, 0.5, 0.2, step = 0.01),
+      sliderInput("S0",     "Initial Portfolio Value", 50, 200, 100, step = 10)
     ),
     mainPanel(
-      plotOutput("histPlot"),
-      verbatimTextOutput("riskText")
+      plotOutput("lossPlot"),
+      verbatimTextOutput("varText")
     )
   )
 )
 
-# Server
+# ---------------- SERVER LAYER ----------------
 server <- function(input, output) {
-  sim_data <- reactive({
-    run_simulation(
-      n_sims = input$n_sims,
-      mean_return = input$mean_return,
-      volatility = input$volatility,
-      investment = input$investment
-    )
+  results <- reactive({
+    run_analytics(input$n_sims, input$mu, input$sigma, input$S0)
   })
-  output$histPlot <- renderPlot({
-    data <- sim_data()
-    df <- data.frame(values = data$final_values)
-    ggplot(df, aes(x = values)) +
-      geom_histogram(bins = 50) +
-      labs(
-        title = "Distribution of Portfolio Outcomes",
-        x = "Final Portfolio Value",
-        y = "Frequency"
-      )
+
+  output$lossPlot <- renderPlot({
+    hist(results()$loss, breaks = 50, col = "salmon",
+         main = "Simulated Loss Distribution", xlab = "Loss")
+    abline(v = results()$VaR, col = "red", lwd = 2)
   })
-  output$riskText <- renderText({
-    data <- sim_data()
-    paste0(
-      "Value at Risk (95%): ", round(data$VaR, 2), "\n",
-      "Expected Shortfall (95%): ", round(data$ES, 2)
-      
-    )
+
+  output$varText <- renderText({
+    paste("95% Value at Risk:", round(results()$VaR, 2))
   })
 }
 
+# ---------------- APPLICATION GENERATOR ----------------
 shinyApp(ui = ui, server = server)
-)====="
+'
+  cat("\n==================== Practical 10: Build an App ====================\n")
   cat(code)
-  invisible(code)
 }
+
+# ---- Print every practical in order ----
+print_all_practicals <- function() {
+  Practical1_R_for_Finance()
+  Practical2_R_Warmups()
+  Practical3_Term_Structure_Splines()
+  Practical4_Market_Risk()
+  Practical5_Credit_Risk()
+  Practical6_Operational_Risk()
+  Practical7_Volatility_GARCH()
+  Practical8_Portfolio_Analytics()
+  Practical9_Monte_Carlo_Risk()
+  Practical10_Shiny_App()
+}
+
+# ---- Example usage ----
+# Practical4_Market_Risk()      # print just Practical 4's code
+# print_all_practicals()        # print all 10, in order
+
 
 #############################################################
 # End of library. Run commands() to see all available functions.
