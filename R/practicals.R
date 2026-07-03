@@ -1,75 +1,11 @@
-#############################################################
-# Financial Risk Analytics Practical - Code Library
-# PSDSP615b
-#
-# Usage:
-#   source("financial_risk_analytics.R")
-#   commands()      -> lists all practical function names + descriptions
-#   practical1()     -> prints the code for Practical 1
-#   practical2()     -> prints the code for Practical 2
-#   ... and so on through practical10()
-#############################################################
-
-# ---------------------------------------------------------------
-# Metadata table: function name + short description of each practical
-# ---------------------------------------------------------------
-.practical_info <- data.frame(
-  Function    = paste0("practical", 1:10),
-  Title       = c(
-    "R for Finance",
-    "More R Warm-Ups",
-    "Term Structure and Splines",
-    "Market Risk",
-    "Credit Risk",
-    "Operational Risk",
-    "Measuring Volatility",
-    "Portfolio Analytics",
-    "Monte Carlo Risk Analysis",
-    "Build an App (Shiny)"
-  ),
-  Description = c(
-    "R computations, data structures, financial, probability, and statistics calculations, visualization. Documentation with R Markdown.",
-    "Functions, loops, control, bootstrapping, simulation, and more visualization.",
-    "Statistical definitions and financial models of bond prices; build a term structure of forward rates; estimate with nonlinear least squares; compare model specifications.",
-    "Measure risks using historical and parametric approaches (VaR); interpret results relative to business decisions; visualize market risk.",
-    "Use transaction/credit migration data to examine default relationships; simulate default probabilities using Markov chains; explore hazard rates and transition probabilities.",
-    "Define frequency and severity; calculate risk of loss and potential loss; fire losses; estimate extremes (VaR).",
-    "Fix for volatility clustering; fit AR-GARCH models; simulate volatility from the AR-GARCH model; measure risk of exposures.",
-    "Portfolio optimization; combine risk management with portfolio allocations; optimize allocations (mean-variance, ROI/quadprog).",
-    "Perform risk analysis using Monte Carlo simulations on a multi-asset portfolio (VaR and Expected Shortfall).",
-    "Build a Shiny app with four architectural layers: Analytics, UI, Server, and Application generator for portfolio risk simulation."
-  ),
-  stringsAsFactors = FALSE
-)
-
-#' List all practical functions and their descriptions
-#'
-#' Prints the function name, title, and description for each practical
-#' (practical1 through practical10) contained in this package.
-#'
-#' @return Invisibly returns the metadata data frame.
-#' @export
-commands <- function() {
-  cat("=============================================================\n")
-  cat(" AVAILABLE PRACTICAL FUNCTIONS - Financial Risk Analytics\n")
-  cat("=============================================================\n\n")
-  for (i in seq_len(nrow(.practical_info))) {
-    cat(sprintf("Practical %d\n", i))
-    cat(sprintf("  Function    : %s()\n", .practical_info$Function[i]))
-    cat(sprintf("  Title       : %s\n", .practical_info$Title[i]))
-    cat(sprintf("  Description : %s\n\n", .practical_info$Description[i]))
-  }
-  invisible(.practical_info)
-}
-
-# ---------------------------------------------------------------
-# PRACTICAL 1: R for Finance
-# ---------------------------------------------------------------
 #' Practical 1: R for Finance
 #'
-#' Prints the R code for Practical 1 (R for Finance) to the console.
+#' Prints annotated R code covering basic R computations, data structures,
+#' a future value calculation, simple return simulation, and plots.
 #'
-#' @return Invisibly returns the code as a character string.
+#' @return Invisibly returns \code{NULL}; called for its printed side effect.
+#' @examples
+#' Practical1_R_for_Finance()
 #' @export
 Practical1_R_for_Finance <- function() {
   code <- '
@@ -104,8 +40,18 @@ plot(cumsum(returns), type = "l", main = "Cumulative Returns", col = "darkblue",
 '
   cat("\n==================== Practical 1: R for Finance ====================\n")
   cat(code)
+  invisible(NULL)
 }
 
+#' Practical 2: More R Warm-Ups
+#'
+#' Prints annotated R code covering functions, control flow, loops,
+#' bootstrapping a confidence interval, and a random walk simulation.
+#'
+#' @return Invisibly returns \code{NULL}; called for its printed side effect.
+#' @examples
+#' Practical2_R_Warmups()
+#' @export
 Practical2_R_Warmups <- function() {
   code <- '
 # ---- Function ----
@@ -151,8 +97,18 @@ par(mfrow = c(1, 1))
 '
   cat("\n==================== Practical 2: More R Warm-Ups ====================\n")
   cat(code)
+  invisible(NULL)
 }
 
+#' Practical 3: Term Structure and Splines
+#'
+#' Prints annotated R code fitting a Nelson-Siegel model and a cubic
+#' smoothing spline to a synthetic yield curve, and comparing RMSE.
+#'
+#' @return Invisibly returns \code{NULL}; called for its printed side effect.
+#' @examples
+#' Practical3_Term_Structure_Splines()
+#' @export
 Practical3_Term_Structure_Splines <- function() {
   code <- '
 library(minpack.lm)
@@ -202,8 +158,18 @@ legend("bottomright", legend = c("Nelson-Siegel", "Spline"),
 '
   cat("\n==================== Practical 3: Term Structure and Splines ====================\n")
   cat(code)
+  invisible(NULL)
 }
 
+#' Practical 4: Market Risk
+#'
+#' Prints annotated R code computing parametric and historical
+#' Value-at-Risk (VaR) on a simulated daily return series.
+#'
+#' @return Invisibly returns \code{NULL}; called for its printed side effect.
+#' @examples
+#' Practical4_Market_Risk()
+#' @export
 Practical4_Market_Risk <- function() {
   code <- '
 set.seed(10)
@@ -235,8 +201,19 @@ legend("topright", legend = c("Historical VaR", "Parametric VaR"),
 '
   cat("\n==================== Practical 4: Market Risk ====================\n")
   cat(code)
+  invisible(NULL)
 }
 
+#' Practical 5: Credit Risk
+#'
+#' Prints annotated R code simulating rating migration with a Markov
+#' chain transition matrix, Monte Carlo default probabilities, and a
+#' hazard rate calculation.
+#'
+#' @return Invisibly returns \code{NULL}; called for its printed side effect.
+#' @examples
+#' Practical5_Credit_Risk()
+#' @export
 Practical5_Credit_Risk <- function() {
   code <- '
 # ---- Simplified credit rating transition matrix ----
@@ -284,8 +261,18 @@ barplot(defaulted |> table() |> prop.table(), col = c("darkgreen", "darkred"),
 '
   cat("\n==================== Practical 5: Credit Risk ====================\n")
   cat(code)
+  invisible(NULL)
 }
 
+#' Practical 6: Operational Risk
+#'
+#' Prints annotated R code for a frequency-severity operational loss
+#' model, fire loss severity, and a peaks-over-threshold (GPD) fit.
+#'
+#' @return Invisibly returns \code{NULL}; called for its printed side effect.
+#' @examples
+#' Practical6_Operational_Risk()
+#' @export
 Practical6_Operational_Risk <- function() {
   code <- '
 library(evd)
@@ -323,8 +310,18 @@ par(mfrow = c(1, 1))
 '
   cat("\n==================== Practical 6: Operational Risk ====================\n")
   cat(code)
+  invisible(NULL)
 }
 
+#' Practical 7: Measuring Volatility (GARCH)
+#'
+#' Prints annotated R code fitting an AR(1)-GARCH(1,1) model, simulating
+#' a future volatility path, and computing a GARCH-based VaR.
+#'
+#' @return Invisibly returns \code{NULL}; called for its printed side effect.
+#' @examples
+#' Practical7_Volatility_GARCH()
+#' @export
 Practical7_Volatility_GARCH <- function() {
   code <- '
 library(rugarch)
@@ -359,8 +356,18 @@ par(mfrow = c(1, 1))
 '
   cat("\n==================== Practical 7: Measuring Volatility ====================\n")
   cat(code)
+  invisible(NULL)
 }
 
+#' Practical 8: Portfolio Analytics
+#'
+#' Prints annotated R code solving a minimum-variance, long-only
+#' portfolio via quadratic programming and computing portfolio VaR.
+#'
+#' @return Invisibly returns \code{NULL}; called for its printed side effect.
+#' @examples
+#' Practical8_Portfolio_Analytics()
+#' @export
 Practical8_Portfolio_Analytics <- function() {
   code <- '
 library(quadprog)
@@ -402,8 +409,19 @@ barplot(weights, main = "Minimum Variance Portfolio Weights",
 '
   cat("\n==================== Practical 8: Portfolio Analytics ====================\n")
   cat(code)
+  invisible(NULL)
 }
 
+#' Practical 9: Monte Carlo Risk Simulation
+#'
+#' Prints annotated R code simulating terminal asset values via
+#' Geometric Brownian Motion and computing Monte Carlo VaR and
+#' Expected Shortfall.
+#'
+#' @return Invisibly returns \code{NULL}; called for its printed side effect.
+#' @examples
+#' Practical9_Monte_Carlo_Risk()
+#' @export
 Practical9_Monte_Carlo_Risk <- function() {
   code <- '
 set.seed(11)
@@ -438,8 +456,19 @@ par(mfrow = c(1, 1))
 '
   cat("\n==================== Practical 9: Monte Carlo Risk Simulation ====================\n")
   cat(code)
+  invisible(NULL)
 }
 
+#' Practical 10: Build a Shiny Risk App
+#'
+#' Prints annotated R code for a full Shiny application (analytics,
+#' UI, and server layers) implementing an interactive Monte Carlo
+#' risk dashboard.
+#'
+#' @return Invisibly returns \code{NULL}; called for its printed side effect.
+#' @examples
+#' Practical10_Shiny_App()
+#' @export
 Practical10_Shiny_App <- function() {
   code <- '
 # ---------------- ANALYTICS LAYER ----------------
@@ -493,9 +522,20 @@ shinyApp(ui = ui, server = server)
 '
   cat("\n==================== Practical 10: Build an App ====================\n")
   cat(code)
+  invisible(NULL)
 }
 
-# ---- Print every practical in order ----
+#' Print Every Practical in Order
+#'
+#' Convenience wrapper that calls all ten \code{Practical*_*()} functions
+#' in sequence, printing their annotated code one after another.
+#'
+#' @return Invisibly returns \code{NULL}; called for its printed side effect.
+#' @examples
+#' \donttest{
+#' print_all_practicals()
+#' }
+#' @export
 print_all_practicals <- function() {
   Practical1_R_for_Finance()
   Practical2_R_Warmups()
@@ -507,13 +547,5 @@ print_all_practicals <- function() {
   Practical8_Portfolio_Analytics()
   Practical9_Monte_Carlo_Risk()
   Practical10_Shiny_App()
+  invisible(NULL)
 }
-
-# ---- Example usage ----
-# Practical4_Market_Risk()      # print just Practical 4's code
-# print_all_practicals()        # print all 10, in order
-
-
-#############################################################
-# End of library. Run commands() to see all available functions.
-#############################################################

@@ -1,16 +1,23 @@
 Package: finRiskPractical
 Type: Package
-Title: Financial Risk Analytics Practical Code Library
+Title: Teaching Scripts for Financial Risk Analytics Practicals
 Version: 0.1.0
-Authors@R: person("Aryan", "Jbagwe", email = "aryanjbagwe@gmail.com", role = c("aut", "cre"))
-Description: A collection of 10 R practical scripts covering financial risk
-    analytics topics: R basics, warm-up exercises, term structure and
-    splines, market risk (VaR), credit risk (Markov chains), operational
-    risk, volatility modeling (GARCH), portfolio optimization, Monte
-    Carlo simulation, and a Shiny risk app. Each practicalN() function
-    prints its corresponding code to the console, and commands() lists
-    all available functions with descriptions.
+Authors@R: person("Phanthomx", email = "you@example.com", role = c("aut", "cre"))
+Description: A collection of ten worked practical scripts covering R
+    fundamentals, term structure modelling, market risk (VaR), credit
+    risk (Markov chains), operational risk (frequency-severity models),
+    volatility (GARCH), portfolio optimisation, Monte Carlo risk
+    simulation, and a Shiny risk dashboard. Each Practical*() function
+    prints the annotated R code for that topic so it can be copied,
+    run, and studied interactively. This package intentionally ships
+    the material as printable teaching code rather than as executed
+    computations, so it has no hard dependency on the packages used
+    inside the printed examples (minpack.lm, evd, rugarch, quadprog,
+    shiny); install those separately if you want to run the printed
+    code yourself.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
+URL: https://github.com/phanthomx/finRiskPractical
+BugReports: https://github.com/phanthomx/finRiskPractical/issues
