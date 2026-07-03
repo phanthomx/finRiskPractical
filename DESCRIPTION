@@ -1,0 +1,17 @@
+Package: finRiskPractical
+Type: Package
+Title: Financial Risk Analytics Practical Code Library
+Version: 0.1.0
+Author: person("Your", "Name", role = c("aut", "cre"))
+Maintainer: Your Name <you@example.com>
+Description: A collection of 10 R practical scripts covering financial risk
+    analytics topics: R basics, warm-up exercises, term structure and
+    splines, market risk (VaR), credit risk (Markov chains), operational
+    risk, volatility modeling (GARCH), portfolio optimization, Monte
+    Carlo simulation, and a Shiny risk app. Each practicalN() function
+    prints its corresponding code to the console, and commands() lists
+    all available functions with descriptions.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.3.1
